@@ -1,4 +1,4 @@
-[blog link](https://realpython.com/python-gui-tkinter/)
+[blog link](https://realpython.com/python-gui-tkinter/)<br>
 [tkinter docs](https://tkdocs.com/tutorial/index.html)
 
 ### Tkinter GUI python
