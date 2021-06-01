@@ -171,9 +171,171 @@ frame.pack()
 label1=tk.Label(master=frame, text="I'm at (0, 0)", bg="red")
 label1.place(x=0, y=0)     #create a red label and place at position(0, 0)
 
-label2 = tk.Label(master=frame, text="I'm at (75.75)", bg="yellow")
+label2 = tk.Label(master=frame, text="I'm at (75, 75)", bg="yellow")
 label2.place(x=75, y=75)
 
 window.mainloop()
 ```
+grid() geometry manager provides all the power of .pack() in a format that's easier to understnad and mantain it works by splitting a window or Frame into rows and columns.
 
+```
+#creating 3 x 3 grid of frames 
+
+import tkinter as tk 
+
+window = tk.Tk()
+
+for i in range(3):
+    for j in range(3):
+        frame = tk.Frame(
+            master = window,
+            relief = tk.RAISED,
+            borderwidth = 1
+            )
+        frame.grid(row=i, column=j, padx=5, pady=5)
+        label = tk.Label(master=frame, text=f"Row{i}\nColumn{j}")
+        label.pack(padx=5, pady=5)
+window.mainloop()
+```  
+```
+#Grid layout that expands and contracts smoothly as the window is resized
+import tkinter as tk
+
+window = tk.Tk()
+
+for i in range(3):
+    window.columnconfigure(i, weight=1, minsize=75)
+    window.rowconfigure(i, weight=1, minsize=50)
+
+    for j in range(0, 3):
+        frame = tk.Frame(
+            master = window,
+            relief = tk.RAISED,
+            borderwidth = 1
+            )
+        frame.grid(row=i, column=j, padx=5, pady=5)
+
+        label = tk.Label(master=frame, text=f"Row {i}\nColumn {j}")
+        label.pack(padx=5, pady=5)
+
+window.mainloop()
+```
+
+```
+import tkinter as tk 
+
+window = tk.Tk()
+window.columnconfigure(0, minsize=250)
+window.rowconfigure([0,1], minsize=100)
+
+label1 = tk.Label(text="A")
+label1.grid(row=0, column=0)
+
+label2 = tk.Label(text="B")
+label2.grid(row=1, column=0)
+
+window.mainloop()
+```
+
+```
+import tkinter as tk
+
+window = tk.Tk()
+window.columnconfigure(0, minsize=250)
+window.rowconfigure([0, 1], minsize=100)
+
+label1 = tk.Label(text="A")
+label1.grid(row=0, column=0, sticky="n")    #n & N or e, s , w respectively 
+
+label2 = tk.Label(text="B")
+label2.grid(row=1, column=0, sticky="sn")     #can even cobine direction
+
+window.mainloop()
+```
+
+```
+import tkinter as tk
+
+window = tk.Tk()
+
+window.rowconfigure(0, minsize=50)
+window.columnconfigure([0, 1, 2, 3], minsize=50)
+
+label1 = tk.Label(text="1", bg="black", fg="white")
+label2 = tk.Label(text="2", bg="black", fg="white")
+label3 = tk.Label(text="3", bg="black", fg="white")
+label4 = tk.Label(text="4", bg="black", fg="white")
+
+label1.grid(row=0, column=0)
+label2.grid(row=0, column=1, sticky="ew")
+label3.grid(row=0, column=2, sticky="ns")
+label4.grid(row=0, column=3, sticky="nsew")
+
+window.mainloop()
+```
+.grid()        |     .pack()
+sticky="ns"	   fill = tk.Y
+sticky="ew"        fill = tk.X
+sticky="nsew"      fill = tk.BOTH
+
+Making your application Interactive
+
+```
+def handle_click(event):
+    print("The button was clicked")
+
+button = tk.Button(text="Click me!")
+
+button.blind("<Button-1>", handle_click)
+```
+
+```
+#add subtract
+import tkinter as tk 
+
+window = tk.Tk()
+
+def increase():
+	value = int(lbl_value['text'])
+	lbl_value["text"] = f"{value + 1}"
+
+def decrease():
+	value = int(lbl_value['text'])
+	lbl_value["text"] = f"{value - 1}"
+
+window.rowconfigure(0, minsize=50, weight=1)
+window.columnconfigure([0, 1, 2], minsize=50, weight=1)
+
+btn_decrease = tk.Button(master=window, text="-", command=decrease)
+btn_decrease.grid(row=0, column=0, sticky="nsew")
+
+lbl_value = tk.Label(master=window, text="0")
+lbl_value.grid(row=0, column=1)
+
+btn_increase = tk.Button(master=window, text="+", command=increase)
+btn_increase.grid(row=0, column=2, sticky="nsew")
+
+window.mainloop()
+```
+
+```
+#roll dice
+
+import random
+import tkinter as tk
+
+def roll():
+    lbl_result["text"] = str(random.randint(1, 6))
+
+window = tk.Tk()
+window.columnconfigure(0, minsize=150)
+window.rowconfigure([0, 1], minsize=50)
+
+btn_roll = tk.Button(text="Roll", command=roll)
+lbl_result = tk.Label()
+
+btn_roll.grid(row=0, column=0, sticky="nsew")
+lbl_result.grid(row=1, column=0)
+
+window.mainloop()
+```
